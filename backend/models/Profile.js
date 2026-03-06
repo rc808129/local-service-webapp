@@ -1,100 +1,77 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const profileSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
-      unique: true // एक यूजर की सिर्फ एक प्रोफाइल हो
+      unique: true
     },
 
-    // Personal Details
     name: {
       type: String,
       trim: true
     },
+
     phone: {
       type: String,
       trim: true
     },
+
     bio: {
       type: String,
       trim: true,
-      maxlength: 500 // ज्यादा लंबा bio न हो
+      maxlength: 500
     },
+
     gender: {
       type: String,
-      enum: ['male', 'female', 'other', null],
+      enum: ["male", "female", "other"],
       default: null
     },
+
     age: {
       type: Number,
       min: 18,
       max: 100
     },
-    address: {
+
+    location: {
       type: String,
       trim: true
     },
 
-    // Skills & Services
     skills: {
       type: [String],
       default: []
     },
 
-    // Pricing
-    pricePerHour: {
+    price: {
       type: Number,
       min: 0,
       default: 0
-    },
-    pricingType: {
-      type: String,
-      enum: ['hourly', 'daily', 'fixed'],
-      default: 'hourly'
     },
 
-    // Experience & Availability
-    experience: {
-      type: Number,
-      min: 0,
-      default: 0
+    pricingType: {
+      type: String,
+      enum: ["service", "hour", "day"],
+      default: "service"
     },
+
     availability: {
-      type: [String], // ['Monday', 'Tuesday', ...]
+      type: [String],
       default: []
     },
 
-    // Location (Geospatial)
-    location: {
-      type: {
-        type: String,
-        enum: ['Point'],
-        default: 'Point'
-      },
-      coordinates: {
-        type: [Number], // [longitude, latitude]
-        default: [0, 0]
-      }
-    },
-
-    // Photo (Cloudinary या URL)
     photo: {
       type: String,
       default: null
     }
   },
   {
-    timestamps: true // createdAt, updatedAt ऑटो ऐड हो जाएंगे
+    timestamps: true
   }
 );
 
-// Geospatial index – जरूरी है nearby search के लिए
-profileSchema.index({ location: '2dsphere' });
-
-// Optional: अगर name और phone unique रखना चाहो
-// profileSchema.index({ phone: 1 }, { unique: true, sparse: true });
-
-export default mongoose.model('Profile', profileSchema);
+export default mongoose.model("Profile", profileSchema);

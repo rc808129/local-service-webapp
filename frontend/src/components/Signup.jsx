@@ -1,24 +1,34 @@
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { Button, TextField, Container, Typography, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
+import { Button, TextField, Container, Typography, Select, MenuItem, FormControl, InputLabel, Autocomplete, Box } from '@mui/material';
 import '../App.css';
+
+
+const cities = [
+  "Noida",
+  "Delhi",
+  "Mumbai",
+  "Lucknow",
+  "Kanpur",
+  "Agra",
+  "Nagpur",
+  "Bangalore"
+];
 
 
 const Signup = () => {
  const { register, handleSubmit, control } = useForm();
  const navigate = useNavigate();
 
-
-
   const onSubmit = async (data) => {
     console.log(data)
     try {
       const res = await axios.post('http://localhost:5000/api/users/signup', data);
       localStorage.setItem('token', res.data.token); 
-       // टोकन स्टोर
+      
         navigate("/");
-      alert('Signup successful!');  // बाद में रीडायरेक्ट करो /dashboard पर
+      alert('Signup successful!');  
      
     } catch (err) {
       alert(err.response.data.msg);
@@ -32,29 +42,27 @@ const Signup = () => {
         <TextField label="Name" fullWidth margin="normal" {...register('name', { required: true })} />
         <TextField label="Email" fullWidth margin="normal" {...register('email', { required: true })} />
         <TextField label="Password" type="password" fullWidth margin="normal" {...register('password', { required: true })} />
-       <FormControl fullWidth margin="normal">
-  <InputLabel id="role-label">Role</InputLabel>
+     <FormControl fullWidth margin="normal">
   <Controller
-    name="role"
+    name="city"
     control={control}
     defaultValue=""
     rules={{ required: true }}
     render={({ field }) => (
-      <Select {...field} labelId="role-label" label="Role">
-        <MenuItem value="client">Client</MenuItem>
-        <MenuItem value="worker">Worker</MenuItem>
-      </Select>
+      <Autocomplete
+        freeSolo
+        options={cities}
+        onInputChange={(event, value) => field.onChange(value)}
+        renderInput={(params) => (
+          <TextField {...params} label="Select Your City" />
+        )}
+      />
     )}
   />
 </FormControl>
 
         <Button type="submit" variant="contained" color="primary" fullWidth>Signup</Button>
-          {/* <Typography
-        sx={{ mt: 2, textAlign: "right", cursor: "pointer", color: "primary.main" }}
-        onClick={() => navigate("/login")}
-      >
-        Already have an account? Login
-      </Typography> */}
+       
       
       <Box sx={{ mt: 3, textAlign: "center" }}>
         <Typography variant="body2">

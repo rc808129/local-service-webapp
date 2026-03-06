@@ -32,6 +32,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+
+
 dotenv.config();
 
 const app = express();
@@ -45,7 +47,8 @@ app.use(cors({
     'http://localhost:5175',
     'http://127.0.0.1:5174'
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT',
+    'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
@@ -63,6 +66,10 @@ app.use('/api/users', userRoutes);
 
 import profileRoutes from './routes/profiles.js';
 app.use('/api/profiles', profileRoutes);
+
+import requestRoutes from './routes/requests.js';
+
+app.use('/api/requests', requestRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));

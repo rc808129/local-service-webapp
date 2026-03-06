@@ -25,12 +25,7 @@ const Login = () => {
         <TextField label="Email" fullWidth margin="normal" {...register('email', { required: true })} />
         <TextField label="Password" type="password" fullWidth margin="normal" {...register('password', { required: true })} />
         <Button type="submit" variant="contained" color="primary" fullWidth>Login</Button>
-         {/* <Typography
-        sx={{ mt: 2, textAlign: "right", cursor: "pointer", color: "primary.main" }}
-        onClick={() => navigate("/signup")}
-      >
-        Don't have an account? Signup
-      </Typography> */}
+        
       <Box sx={{ mt: 3, textAlign: "center" }}>
         <Typography variant="body2">
          Don't have an account?

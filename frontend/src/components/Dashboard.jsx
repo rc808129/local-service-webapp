@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import axios from "axios";
 import ImageSlider from "./ImageSlider";
 import PopularServices from "./PopularServices";
 import HowItWorks from "./HowItWorks";
 import Testimonials from "./Testimonials";
 
-
-
-
-import { Outlet } from "react-router-dom";
 import {
   Button,
   TextField,
@@ -24,11 +18,9 @@ import {
   Backdrop,
   IconButton,
   Avatar,
-  Card,
-  CardContent,
-  Grid
+  
 } from "@mui/material";
-import { jwtDecode } from "jwt-decode";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import Signup from "./Signup";
 import Login from "./Login";
@@ -40,12 +32,12 @@ import CallToAction from "./CallToAction";
 const Dashboard = () => {
   const [openAuth, setOpenAuth] = useState(false);
 
-  const [user, setUser] = useState(null);
-  // const [location, setLocation] = useState({ lat: null, long: null });
-  const [searchSkill, setSearchSkill] = useState("");
-  const [profiles, setProfiles] = useState([]);
+  
 
-  const { register, handleSubmit } = useForm();
+  const [searchSkill, setSearchSkill] = useState("");
+ 
+
+ 
   const navigate = useNavigate();
    const location = useLocation();
 
@@ -60,95 +52,46 @@ useEffect(() => {
 
 
 
-  // =========================
-  // AUTH + LOCATION
-  // =========================
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-
-  //   if (!token) {
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   try {
-  //     const decoded = jwtDecode(token);
-  //     console.log("DECODED USER:", decoded);
-  //     setUser(decoded);
-
-  //     // Axios header (safe way)
-  //     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-  //     // Get current location
-  //     navigator.geolocation.getCurrentPosition(
-        
-  //       (pos) => {
-  //           console.log("LOCATION FOUND", pos.coords);
-  //         setLocation({
-  //           lat: pos.coords.latitude,
-  //           long: pos.coords.longitude
-  //         });
-  //       },
-  //       (err) =>{
-  //         console.log("Location error", err)
-  //          alert("Location permission denied")
-  //       }
-  //     );
-  //   } catch (err) {
-  //     localStorage.removeItem("token");
-  //     navigate("/login");
-  //   }
-  // }, [navigate]);
-
-  // // =========================
-  // // WORKER: PROFILE SUBMIT
-  // // =========================
-  // const onProfileSubmit = async (data) => {
-  //   try {
-  //     const payload = {
-  //       ...data,
-  //       latitude: location.lat,
-  //       longitude: location.long,
-  //       skills: data.skills.split(",").map((s) => s.trim())
-  //     };
-
-  //     await axios.post("http://localhost:5000/api/profiles", payload);
-  //     alert("Profile saved successfully!");
-  //   } catch (err) {
-  //     alert("Profile save failed");
-  //   }
-  // };
-
-  // // =========================
-  // // CLIENT: SEARCH
-  // // =========================
-  // const onSearch = async () => {
-  //     console.log("Searching with:", searchSkill, location);
-  //       if (!location.lat || !location.long) {
-  //   alert("Location not available yet");
-  //   return;
-  // }
-  //   try {
-  //     const res = await axios.get(
-  //       `http://localhost:5000/api/profiles/search?skill=${searchSkill}&lat=${location.lat}&long=${location.long}`
-  //     );
-  //        console.log("RESULT:", res.data);
-  //     setProfiles(res.data);
-  //   } catch (err) {
-  //        console.log(err);
-  //     alert("Search failed");
-  //   }
-  // };
-
-  // if (!user) return <div>Loading...</div>;
+ 
 const handleClose = () => {
   navigate("/");
 };
 
 
-  const handleClick = () => {
+
+const handleSearch = () => {
+  if (searchSkill.trim() === '') {
+    alert('Please enter a skill to search');
+    return;
+  }
+
+
+navigate(`/search/${encodeURIComponent(searchSkill)}`);
+};
+
+
+ const handleClick = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get(
+      "http://localhost:5000/api/profiles/my",
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+
+    if (res.data.profile) {
+      navigate("/my-profile");
+    } else {
+      navigate("/workers");
+    }
+
+  } catch (error) {
+    console.log(error);
     navigate("/workers");
-  };
+  }
+};
 
   return (
     <>
@@ -158,39 +101,7 @@ const handleClose = () => {
           Dashboard - Welcome 
         </Typography>
 
-{/*    
-      {user.role === "worker" ? (
-        <form onSubmit={handleSubmit(onProfileSubmit)}>
-          <TextField
-            label="Skills (comma separated)"
-            fullWidth
-            margin="normal"
-            {...register("skills", { required: true })}
-          />
-          <TextField
-            label="Price per Hour"
-            type="number"
-            fullWidth
-            margin="normal"
-            {...register("pricePerHour")}
-          />
-          <TextField
-            label="Phone"
-            fullWidth
-            margin="normal"
-            {...register("phone", { required: true })}
-          />
-          <TextField
-            label="Other Details"
-            fullWidth
-            margin="normal"
-            {...register("otherDetails")}
-          />
-          <Button type="submit" variant="contained">
-            Save Profile
-          </Button>
-        </form>
-      ) : ( */}
+
     <Box sx={{ flex: 2, display: "flex", justifyContent: "center" }}>
           <Stack direction="row" spacing={1}>
             <TextField
@@ -199,7 +110,7 @@ const handleClose = () => {
               value={searchSkill}
               onChange={(e) => setSearchSkill(e.target.value)}
             />
-            <Button variant="contained" >
+            <Button variant="contained" onClick={handleSearch} >
               Search
             </Button>
           </Stack>
@@ -222,42 +133,7 @@ const handleClose = () => {
       </Toolbar>
     </AppBar>
 
-          {/* /* <Grid container spacing={2} sx={{ mt: 2 }}>
-            {profiles.map((profile, idx) => (
-              <Grid item xs={12} md={6} key={idx}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6">{profile.name}</Typography>
-                    <Typography>
-                      Skills: {profile.skills.join(", ")}
-                    </Typography>
-                    <Typography>
-                      Price: ₹{profile.pricePerHour}/hr
-                    </Typography>
-                    <Typography>Phone: {profile.phone}</Typography>
-                    <Typography>{profile.otherDetails}</Typography>
-                    <Typography>
-                      Distance: {profile.dist} meters
-                    </Typography>
-
-                    <Button
-                      variant="outlined"
-                      sx={{ mt: 1 }}
-                      onClick={() =>
-                        alert(
-                          `Contact ${profile.name} at ${profile.phone}`
-                        )
-                      }
-                    >
-                      Contact
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid> */
       
-      /* )} */ }
       
         <Modal
         open={openAuth}

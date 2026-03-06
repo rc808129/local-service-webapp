@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useForm,Controller } from "react-hook-form";
-import axios from "axios";
-
+import { useForm, Controller } from "react-hook-form";
 import {
   Box,
+  Checkbox,
   Grid,
   Typography,
   TextField,
@@ -16,14 +15,14 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Checkbox,
   FormGroup,
   Select,
   MenuItem,
 } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 const commonSkills = [
   "AC Repair",
@@ -45,48 +44,44 @@ const commonSkills = [
   "Roof Waterproofing",
   "Furniture Repair",
 ];
-const WorkerProfileSetup = () => {
-  const navigate = useNavigate();
-  const { register, handleSubmit,control } = useForm();
-  const [skills, setSkills] = useState([]);
-  const [photo, setPhoto] = useState(null);
-  const [availability, setAvailability] = useState([]);
 
-  const onSubmit = async (data) => {
+const EditProfile = () => {
+  const navigate = useNavigate();
+  const locationState = useLocation().state;
+  console.log(locationState);
+  const { register, handleSubmit, control } = useForm({
+    defaultValues: locationState?.profile || {},
+  });
+  const [skills, setSkills] = useState(locationState?.profile.skills || []);
+  const [photo, setPhoto] = useState(locationState?.profile.photo || null);
+  const [availability, setAvailability] = useState(
+    locationState?.profile.availability || [],
+  );
+
+  const onSubmit = async (formData) => {
+    console.log("hello owlrd")
+   
     try {
+      const token = localStorage.getItem("token");
+       console.log(token)
       const profileData = {
-        data,
+        ...formData,
         skills,
         availability,
-        photo: photo ? photo : null,
+        photo: photo || null,
       };
-      console.log(profileData);
-      const token = localStorage.getItem("token");
+      console.log(profileData)
 
-      if (!token) {
-        alert("Please login first!");
-        navigate("/login");
-        return;
-      }
+     const response =  await axios.patch("http://localhost:5000/api/profiles", profileData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      const res = await axios.post(
-        "http://localhost:5000/api/profiles",
-        profileData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      console.log(response.data.profile)
 
-      alert("Profile Saved Successfully! 🎉 Now clients can find you.");
-
+      alert("Profile Updated Successfully! 🎉");
       navigate("/my-profile");
     } catch (err) {
-      console.error(err);
-      alert(
-        err.response?.data?.msg || "Error saving profile. Please try again.",
-      );
+      alert(err.response?.data?.msg || "Error updating profile");
     }
   };
 
@@ -116,7 +111,7 @@ const WorkerProfileSetup = () => {
           align="center"
           sx={{ mb: 4 }}
         >
-          Setup Your Worker Profile
+          Edit Your Worker Profile
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -141,9 +136,9 @@ const WorkerProfileSetup = () => {
                   width: 140,
                   height: 140,
                   mx: "auto",
+                  cursor: "pointer",
                   mb: 2,
                   border: "4px solid #1976d2",
-                  cursor: "pointer",
                 }}
               />
               <input
@@ -155,14 +150,13 @@ const WorkerProfileSetup = () => {
                 }
               />
             </Button>
-
             <Button
               variant="contained"
               component="label"
               startIcon={<PhotoCameraIcon />}
               sx={{ borderRadius: 50 }}
             >
-              Upload Profile Photo
+              Upload New Photo
               <input
                 type="file"
                 hidden
@@ -173,7 +167,7 @@ const WorkerProfileSetup = () => {
               />
             </Button>
           </Box>
-       
+
           <Grid container spacing={3} sx={{ mt: 2 }}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
@@ -184,6 +178,7 @@ const WorkerProfileSetup = () => {
                 variant="outlined"
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
@@ -194,7 +189,7 @@ const WorkerProfileSetup = () => {
               />
             </Grid>
 
-          <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
   <FormControl fullWidth>
     <FormLabel>Gender</FormLabel>
 
@@ -212,6 +207,7 @@ const WorkerProfileSetup = () => {
 
   </FormControl>
 </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
@@ -248,7 +244,6 @@ const WorkerProfileSetup = () => {
               >
                 Add you Skills
               </Typography>
-
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                 {commonSkills.map((skill) => (
                   <Chip
@@ -264,7 +259,7 @@ const WorkerProfileSetup = () => {
                     color={skills.includes(skill) ? "primary" : "default"}
                     variant={skills.includes(skill) ? "filled" : "outlined"}
                     clickable
-                    sx={{ fontSize: "0.95rem", py: 1 }}
+                    sx={{ fontSize: "0.95rem", py: 1.5 }}
                   />
                 ))}
               </Box>
@@ -273,18 +268,21 @@ const WorkerProfileSetup = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
-                label="Price  (₹)"
+                label="Price (₹)"
                 type="number"
                 {...register("price")}
                 variant="outlined"
                 required
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth>
                 <Select
                   {...register("pricingType")}
-                  defaultValue="Select Pricing Type"
+                  defaultValue={
+                    locationState?.profile?.pricingType || "Select Pricing Type"
+                  }
                 >
                   <MenuItem value="Select Pricing Type">
                     Select Pricing Type
@@ -310,7 +308,6 @@ const WorkerProfileSetup = () => {
               >
                 Available Days
               </Typography>
-
               <FormGroup row sx={{ flexWrap: "wrap", gap: 1 }}>
                 {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
                   (day) => (
@@ -368,14 +365,13 @@ const WorkerProfileSetup = () => {
                 },
               }}
             >
-              Save your worker profile
+              Update Profile
             </Button>
           </Grid>
-         
         </form>
       </Card>
     </Box>
   );
 };
 
-export default WorkerProfileSetup;
+export default EditProfile;
