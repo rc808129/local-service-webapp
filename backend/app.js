@@ -41,7 +41,7 @@ app.use('/api/profiles', profileRoutes);
 
 import requestRoutes from './routes/requests.js';
 
-app.get("/", (req, res) => {
+app.get("/raj", (req, res) => {
   res.json({ message: "API working" });
 });
 app.use('/api/requests', requestRoutes);
