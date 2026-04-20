@@ -125,7 +125,7 @@ const WorkerProfileSetup = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              mb: 4,
+              mb: 4, // 1uit = 8px
             }}
           >
             <Button
@@ -152,7 +152,7 @@ const WorkerProfileSetup = () => {
                 accept="image/*"
                 onChange={(e) =>
                   setPhoto(URL.createObjectURL(e.target.files[0]))
-                }
+                }  // aisa temporary url banana taaki vah web page mai displya ho sakte
               />
             </Button>
 
@@ -379,3 +379,9 @@ const WorkerProfileSetup = () => {
 };
 
 export default WorkerProfileSetup;
+
+
+// {/* controller ka use redio button ko useform se connect karne ke liye */}
+// {/* control use taki vah rediogroup ki value useform control kar skate */}
+// {/*  */}
+// {/* filed value or onChange dena hai */}

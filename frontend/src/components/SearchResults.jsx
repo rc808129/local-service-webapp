@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import {
   Box, Container, Typography, Grid, Card, CardContent, CardMedia,
-  Button, Chip, Rating, CircularProgress, Alert,Fade, Divider
+  Button, Chip, Rating,  CircularProgress, Alert,Fade, Divider
 } from '@mui/material';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import WorkIcon from '@mui/icons-material/Work';
+
+import TransgenderIcon from '@mui/icons-material/Transgender';
 
 const SearchResults = () => {
 
@@ -67,10 +69,9 @@ if (loading) {
     );
   }
 
-  return (
+ return (
     <Box sx={{ py: 8, bgcolor: '#f8fafc', minHeight: '100vh' }}>
       <Container maxWidth="lg">
-        {/* Heading */}
         <Typography
           variant="h3"
           align="center"
@@ -111,7 +112,8 @@ if (loading) {
                         transform: 'translateY(-12px)',
                         boxShadow: '0 20px 50px rgba(0,0,0,0.15)',
                       },
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      background: 'white'
                     }}
                     onClick={() => navigate(`/worker/${worker._id}`)}
                   >
@@ -126,18 +128,25 @@ if (loading) {
 
                     {/* Content */}
                     <CardContent sx={{ p: 3 }}>
-                      {/* Name */}
+                      {/* Name & ID */}
                       <Typography variant="h6" fontWeight="bold" gutterBottom noWrap>
-                        {worker.name}
+                        {worker.name} <Typography component="span" variant="caption" color="text.secondary">
+                          (ID: {worker._id.slice(-6)})
+                        </Typography>
                       </Typography>
 
-                      {/* Rating */}
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-                        <Rating value={4.5} readOnly precision={0.5} size="small" />
-                        <Typography variant="body2" sx={{ ml: 1, color: 'text.secondary' }}>
-                          4.5 ★
+                      {/* Gender & Age */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                        <TransgenderIcon fontSize="small" color="action" />
+                        <Typography variant="body2" color="text.secondary">
+                          {worker.gender || 'Not specified'} • {worker.age || '--'} years
                         </Typography>
                       </Box>
+
+                      {/* Bio */}
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.6, minHeight: 60 }}>
+                        {worker.bio?.slice(0, 100) || 'Professional worker with great experience'}...
+                      </Typography>
 
                       {/* Skills */}
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 2 }}>
@@ -149,32 +158,41 @@ if (loading) {
                         )}
                       </Box>
 
-                      {/* Price & Distance */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <MonetizationOnIcon fontSize="small" sx={{ mr: 0.5, color: '#16a34a' }} />
+                      {/* Price, Location, Availability */}
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 3 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <MonetizationOnIcon fontSize="small" sx={{ color: '#16a34a' }} />
                           <Typography variant="body1" fontWeight="medium" color="success.main">
-                            ₹{worker.pricePerHour || '--'}/hr
+                            ₹{worker.pricePerHour || '--'}/{worker.pricingType || 'hr'}
                           </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <LocationOnIcon fontSize="small" sx={{ mr: 0.5, color: '#ef4444' }} />
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <LocationOnIcon fontSize="small" sx={{ color: '#ef4444' }} />
                           <Typography variant="body2" color="text.secondary">
-                            {Math.round(worker.dist / 1000)} km
+                            {worker.location || 'Noida / Delhi'} • {Math.round(worker.dist / 1000) || '--'} km
+                          </Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <CalendarMonthIcon fontSize="small" sx={{ color: '#8b5cf6' }} />
+                          <Typography variant="body2" color="text.secondary">
+                            Available: {worker.availability?.join(', ') || 'Not specified'}
                           </Typography>
                         </Box>
                       </Box>
 
-                      {/* Hire/Request Button */}
+                      <Divider sx={{ my: 2 }} />
+
+                      {/* Hire / Request Button */}
                       <Button
                         variant="contained"
                         fullWidth
                         size="large"
                         onClick={(e) => {
-                          e.stopPropagation(); // Card click ko rok do
-                          // Request logic yahan call karo
+                          e.stopPropagation(); // Card click रोकें
                           alert(`Request sent to ${worker.name} for ${decodedSkill}!`);
-                          // Real mein handleRequest(worker._id) call karo
+                          // Real में handleRequest(worker._id) call करो
                         }}
                         sx={{
                           borderRadius: 50,
@@ -196,6 +214,7 @@ if (loading) {
     </Box>
   );
 };
+
 
 
 export default SearchResults;

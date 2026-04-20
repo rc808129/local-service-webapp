@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import ImageSlider from "./ImageSlider";
 import PopularServices from "./PopularServices";
 import HowItWorks from "./HowItWorks";
@@ -95,7 +96,7 @@ navigate(`/search/${encodeURIComponent(searchSkill)}`);
 
   return (
     <>
-        <AppBar position="static" color="transparent" elevation={5}>
+        <AppBar position="sticky" sx={{ backgroundColor: "#f5f5f5", color: "black" }} elevation={5}>
            <Toolbar>
        <Typography variant="h6" sx={{ flex: 1 }}>
           Dashboard - Welcome 
@@ -103,8 +104,9 @@ navigate(`/search/${encodeURIComponent(searchSkill)}`);
 
 
     <Box sx={{ flex: 2, display: "flex", justifyContent: "center" }}>
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} sx={{ width: "100%", maxWidth: 600 }}>
             <TextField
+             fullWidth 
               size="small"
               placeholder="Search electrician, plumber..."
               value={searchSkill}
@@ -116,7 +118,7 @@ navigate(`/search/${encodeURIComponent(searchSkill)}`);
           </Stack>
         </Box>
 
-          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <Button variant="outlined"
              onClick={() => navigate("/signup")}
          
