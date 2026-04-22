@@ -1,12 +1,55 @@
 import express from "express";
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import cors from 'cors';
+dotenv.config();
 
 const app = express();
+
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'http://127.0.0.1:5174',
+    'https://local-service-webapp.vercel.app'
+
+  ],
+  methods: ['GET', 'POST', 'PUT',
+    'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+app.use(express.json());
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log('MongoDB Error:', err));
+
+
+import userRoutes from '../routes/users.js'
+app.use('/api/users', userRoutes);
+import profileRoutes from '../routes/profiles.js'
+
+app.use('/api/profiles', profileRoutes);
+
+import requestRoutes from '../routes/requests.js'
+
+
+app.get("/raj", (req, res) => {
+  res.json({ message: "API working" });
+});
+
+app.use('/api/requests', requestRoutes);
+
+
 
 app.get("/", (req, res) => {
   res.send("Backend working 🚀");
 });
 
-// ❌ YE REMOVE KARO
-// app.listen(5000);
+
 
 export default app;
