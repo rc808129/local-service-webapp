@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Button, TextField, Container, Typography, Box } from '@mui/material';
 
-const Login = () => {
+const Login = ({setAuthType}) => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate(); 
 
@@ -33,7 +33,7 @@ const Login = () => {
 
         <Typography
           variant="h6"
-          onClick={() => navigate("/signup")}
+          onClick={() => setAuthType("signup")}
           sx={{
             color: "red",
             fontWeight: "bold",

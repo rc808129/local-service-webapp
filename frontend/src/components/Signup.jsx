@@ -17,7 +17,7 @@ const cities = [
 ];
 
 
-const Signup = () => {
+const Signup = ({setAuthType}) => {
  const { register, handleSubmit, control } = useForm();
  const navigate = useNavigate();
 
@@ -71,7 +71,7 @@ const Signup = () => {
 
         <Typography
           variant="h6"
-          onClick={() => navigate("/login")}
+          onClick={() => setAuthType("login")}
           sx={{
             color: "red",
             fontWeight: "bold",
