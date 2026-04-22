@@ -45,6 +45,7 @@ const Dashboard = () => {
 
   const handleClose = () => {
     setOpenAuth(false)
+    setAuthType("signup")
   };
 
   const handleSearch = () => {
