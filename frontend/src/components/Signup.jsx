@@ -18,7 +18,7 @@ const cities = [
 ];
 
 
-const Signup = ({setAuthType}) => {
+const Signup = ({setAuthType, setOpenAuth}) => {
  const { register, handleSubmit, control } = useForm();
  const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const Signup = ({setAuthType}) => {
     try {
       const res = await axios.post(`${API_URL}/api/users/signup`, data);
       localStorage.setItem('token', res.data.token); 
-      
+       setOpenAuth(false)
         navigate("/");
       alert('Signup successful!');  
      

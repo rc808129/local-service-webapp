@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Button, TextField, Container, Typography, Box } from '@mui/material';
 const API_URL = import.meta.env.VITE_API_URL;
 
-const Login = ({setAuthType}) => {
+const Login = ({setAuthType, setOpenAuth}) => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate(); 
 
@@ -13,6 +13,7 @@ const Login = ({setAuthType}) => {
       const res = await axios.post(`${API_URL}/api/users/login`, data);
       localStorage.setItem('token', res.data.token);
        navigate("/");
+        setOpenAuth(false)
       alert('Login successful!');
     } catch (err) {
       alert(err.response.data.msg);

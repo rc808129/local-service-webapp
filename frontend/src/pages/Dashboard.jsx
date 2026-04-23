@@ -116,7 +116,7 @@ const Dashboard = () => {
               boxShadow: 24,
             }}
           >
-              {authType === "login" ? <Login setAuthType={setAuthType}/> : <Signup setAuthType={setAuthType}/>}
+              {authType === "login" ? <Login setAuthType={setAuthType} setOpenAuth={setOpenAuth}/> : <Signup setAuthType={setAuthType} setOpenAuth={setOpenAuth}/>}
           </Box>
         </Fade>
       </Modal>
