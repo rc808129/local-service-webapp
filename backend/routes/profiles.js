@@ -144,31 +144,48 @@ try {
 });
 router.get("/search", auth, async (req, res) => {
   try {
-
     const { skill } = req.query;
 
+    // Agar search empty hai to empty array return karo
+    if (!skill || skill.trim() === "") {
+      return res.json({ workers: [] });
+    }
+
     const city = req.user.city;
+    const searchTerm = skill.trim().toLowerCase();
 
-    // user search ko words me tod do
-    const words = skill.toLowerCase().split(" ");
+    // Search words ko split karo (space ke hisaab se)
+    const words = searchTerm.split(/\s+/).filter(Boolean);
 
-    const workers = await Profile.find({
-      location: { $regex: city, $options: "i" },
-
+    // Har word ke liye alag condition banao
+    const regexConditions = words.map(word => ({
       skills: {
         $elemMatch: {
-          $regex: words.join("|"), // OR match
-          $options: "i"
+          $regex: word,        // chhota word bhi match karega
+          $options: "i"        // case insensitive
         }
       }
-    });
+    }));
+
+    const workers = await Profile.find({
+      // ================== CITY FILTER ==================
+      location: { $regex: city, $options: "i" },
+
+     
+      $or: regexConditions
+    })
+      .select("name photo skills bio pricePerHour pricingType location gender age availability dist")
+      .sort({ createdAt: -1 })     // Naye profiles pehle
+      .limit(30);                  // Maximum 30 results
 
     res.json({ workers });
 
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ msg: "Server error" });
+    console.error("Search Error:", error);
+    res.status(500).json({ 
+      msg: "Server error",
+      error: error.message 
+    });
   }
 });
-
 export default router;

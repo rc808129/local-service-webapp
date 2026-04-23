@@ -24,28 +24,46 @@ const SearchResults = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-
   const fetchWorkers = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token");
-
-    const res = await axios.get(
-      `${API_URL}/api/profiles/search`,
-      {
-        params: { skill:decodedSkill },   // skill backend ko bhej rahe hain
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      // ←←←← Yeh Important Check Add Karo
+      if (!token) {
+        console.error("No token found in localStorage!");
+        setError("Please login first");
+        setLoading(false);
+        return;
       }
-    );
-    setWorkers(res.data.workers)
-    setLoading(false)
-    console.log(res.data.workers);
 
+      const res = await axios.get(
+        `${API_URL}/api/profiles/search`,
+        {
+          params: { skill: decodedSkill },
+          headers: {
+            Authorization: `Bearer ${token}`   // yeh line sahi honi chahiye
+          }
+        }
+      );
+
+      setWorkers(res.data.workers || []);
+      setError(null);
+    } catch (err) {
+      console.error("Search API Error:", err.response?.data || err.message);
+      
+      if (err.response?.status === 401) {
+        setError("Session expired. Please login again.");
+        // Optional: localStorage.removeItem("token");
+        // navigate("/login");
+      } else {
+        setError("Something went wrong while searching.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   fetchWorkers();
-
 }, [decodedSkill]);
 
   

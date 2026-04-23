@@ -23,7 +23,7 @@ main {
 
 .auth-button {
   border-radius: 30px !important;
-  padding: 10px 28px !important;     /* balanced padding */
+  /* padding: 10px 28px !important;      */
   border: 2px solid #1976d2 !important;
   color: #1976d2 !important;
   font-weight: 600 !important;
