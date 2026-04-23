@@ -123,6 +123,7 @@ const Dashboard = () => {
         <ImageSlider />
       </Box>
       <PopularServices />
+      
       <NearbyWorkers />
       <HowItWorks />
       <Testimonials />
