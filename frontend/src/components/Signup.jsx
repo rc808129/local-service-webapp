@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Button, TextField, Container, Typography, Select, MenuItem, FormControl, InputLabel, Autocomplete, Box } from '@mui/material';
 import '../App.css';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const cities = [
@@ -24,7 +25,7 @@ const Signup = ({setAuthType}) => {
   const onSubmit = async (data) => {
     console.log(data)
     try {
-      const res = await axios.post('http://localhost:5000/api/users/signup', data);
+      const res = await axios.post(`${API_URL}/api/users/signup`, data);
       localStorage.setItem('token', res.data.token); 
       
         navigate("/");

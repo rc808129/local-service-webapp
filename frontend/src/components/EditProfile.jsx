@@ -23,6 +23,7 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const commonSkills = [
   "AC Repair",
@@ -72,7 +73,7 @@ const EditProfile = () => {
       };
       console.log(profileData)
 
-     const response =  await axios.patch("http://localhost:5000/api/profiles", profileData, {
+     const response =  await axios.patch(`${API_URL}/api/profiles`, profileData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

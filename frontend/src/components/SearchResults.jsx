@@ -11,6 +11,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 import TransgenderIcon from '@mui/icons-material/Transgender';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const SearchResults = () => {
 
@@ -29,7 +30,7 @@ const SearchResults = () => {
     const token = localStorage.getItem("token");
 
     const res = await axios.get(
-      "http://localhost:5000/api/profiles/search",
+      `${API_URL}/api/profiles/search`,
       {
         params: { skill:decodedSkill },   // skill backend ko bhej rahe hain
         headers: {

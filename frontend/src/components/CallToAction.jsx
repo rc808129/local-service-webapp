@@ -16,9 +16,8 @@ const CallToAction = () => {
   const navigate = useNavigate();
 
   const handleJoinClick = () => {
-    // Worker registration page पर ले जाए (अभी placeholder)
-    navigate('/worker-signup');  // तुम्हारा worker signup route डाल दो
-    // या अगर अभी नहीं बना है तो: window.open('https://your-worker-form-link.com', '_blank');
+   
+    navigate('/worker-signup');  
   };
 
   return (
@@ -32,7 +31,7 @@ const CallToAction = () => {
         overflow: 'hidden',
       }}
     >
-      {/* बैकग्राउंड पैटर्न/ओवरले (ऑप्शनल – प्रीमियम लुक) */}
+     
       <Box
         sx={{
           position: 'absolute',
@@ -73,7 +72,7 @@ const CallToAction = () => {
           Join thousands of skilled workers and start earning extra income on your own schedule.
         </Typography>
 
-        {/* मुख्य बटन */}
+      
         <Button
           variant="contained"
           size="large"
@@ -97,7 +96,7 @@ const CallToAction = () => {
           Join as Worker & Earn Now
         </Button>
 
-        {/* छोटे फायदे (ट्रस्ट बढ़ाने के लिए) */}
+      
         <Box
           sx={{
             mt: 6,
@@ -129,7 +128,6 @@ const CallToAction = () => {
           </Box>
         </Box>
 
-        {/* छोटा सेकंडरी टेक्स्ट */}
         <Typography variant="body2" sx={{ mt: 5, opacity: 0.85 }}>
           No registration fees • Quick approval • Get paid instantly after every job
         </Typography>

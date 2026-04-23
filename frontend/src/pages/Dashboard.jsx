@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 import ImageSlider from "../components/ImageSlider";
 
@@ -61,7 +62,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:5000/api/profiles/my", {
+      const res = await axios.get(`${API_URL}/api/profiles/my`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -123,7 +124,7 @@ const Dashboard = () => {
         <ImageSlider />
       </Box>
       <PopularServices />
-      
+
       <NearbyWorkers />
       <HowItWorks />
       <Testimonials />

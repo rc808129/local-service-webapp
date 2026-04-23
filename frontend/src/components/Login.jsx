@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Button, TextField, Container, Typography, Box } from '@mui/material';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = ({setAuthType}) => {
   const { register, handleSubmit } = useForm();
@@ -9,7 +10,7 @@ const Login = ({setAuthType}) => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/users/login', data);
+      const res = await axios.post(`${API_URL}/api/users/login`, data);
       localStorage.setItem('token', res.data.token);
        navigate("/");
       alert('Login successful!');

@@ -6,6 +6,7 @@ import { Box, Container, Typography, Avatar, Chip, Card, CardContent, Divider, I
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const MyWorkerProfile = () => {
   const [profile, setProfile] = useState({});
@@ -27,7 +28,7 @@ const MyWorkerProfile = () => {
         return;
       }
 
-      const res = await axios.get('http://localhost:5000/api/profiles/my', {
+      const res = await axios.get(`${API_URL}/api/profiles/my`, {
         headers: { Authorization: `Bearer ${token}` }
       });
        console.log(res.data.profile)

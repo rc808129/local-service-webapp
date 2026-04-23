@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm,Controller } from "react-hook-form";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 import {
   Box,
@@ -70,7 +71,7 @@ const WorkerProfileSetup = () => {
       }
 
       const res = await axios.post(
-        "http://localhost:5000/api/profiles",
+        `${API_URL}/api/profiles`,
         profileData,
         {
           headers: {
