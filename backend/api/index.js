@@ -47,8 +47,11 @@ app.use('/api/requests', requestRoutes);
 
 
 app.get("/", (req, res) => {
-  res.send("Backend working 🚀");
+  res.send("Backend working");
 });
+
+ const port = process.env.PORT || 5000;
+  app.listen(port, () => console.log(`Server running on port ${port}`));
 
 
 
