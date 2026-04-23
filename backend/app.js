@@ -52,3 +52,6 @@
 // // app.listen(port, () => console.log(`Server running on port ${port}`));
 
 //  export default app;
+
+
+MONGO_URI=mongodb+srv://rc808129_db_user:avoL2SeGJr2SuIX3@cluster0.qaffgel.mongodb.net/localServiceDB?

@@ -6,6 +6,8 @@ dotenv.config();
 
 const app = express();
 
+console.log("Mongo URI:", process.env.MONGO_URI);
+
 app.use(cors({
   origin: [
     'http://localhost:3000',
