@@ -8,22 +8,23 @@ const app = express();
 
 console.log("Mongo URI:", process.env.MONGO_URI);
 
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'http://127.0.0.1:5174',
-    'https://local-service-webapp.vercel.app'
+// app.use(cors({
+//   origin: [
+//     'http://localhost:3000',
+//     'http://localhost:5173',
+//     'http://localhost:5174',
+//     'http://localhost:5175',
+//     'http://127.0.0.1:5174',
+//     'https://local-service-webapp.vercel.app'
 
-  ],
-  methods: ['GET', 'POST', 'PUT',
-    'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+//   ],
+//   methods: ['GET', 'POST', 'PUT',
+//     'PATCH', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true
+// }));
 
+app.use(cors())
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)

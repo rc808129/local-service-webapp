@@ -40,7 +40,7 @@ router.post('/signup', async (req, res) => {
     res.json({ token, user: { id: user._id, name, email, city } });
   } catch (err) {
     console.error("SIGNUP ERROR", err);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: 'Sssserver error' });
   }
 });
 
