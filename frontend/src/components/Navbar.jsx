@@ -1,5 +1,5 @@
-
-
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   AppBar,
@@ -16,16 +16,46 @@ import {
 import { useTheme } from '@mui/material/styles';
 
 const ResponsiveAppBar = ({
-  searchSkill,
-  setSearchSkill,
-  handleSearch,
-  navigate,
-  handleClick,
+setOpenAuth
+  
 }) => {
   const theme = useTheme();
+    const [searchSkill, setSearchSkill] = useState("");
+    const navigate = useNavigate()
   
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));   // < 600px → Mobile
   const isTabletOrLarger = useMediaQuery(theme.breakpoints.up('sm')); // ≥ 600px → Tablet + Laptop
+
+
+  
+   const handleSearch = () => {
+    if (searchSkill.trim() === "") {
+      alert("Please enter a skill to search");
+      return;
+    }
+
+    navigate(`/search/${encodeURIComponent(searchSkill)}`);
+  };
+
+
+  const handleClick = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(`${API_URL}/api/profiles/my`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.data.profile) {
+        navigate("/my-profile");
+      } else {
+        navigate("/workers");
+      }
+    } catch (error) {
+      console.log(error);
+      navigate("/workers");
+    }
+  };
 
   return (
     <AppBar 
@@ -87,7 +117,7 @@ const ResponsiveAppBar = ({
                 variant="outlined" 
                 className="auth-button"
                 onClick={() => {
-                  navigate(true);
+                  setOpenAuth(true)
                   console.log("hello my name iskslk");
                 }}
                 sx={{ px: 3, whiteSpace: 'nowrap' }}
@@ -122,7 +152,7 @@ const ResponsiveAppBar = ({
                   size="small"
                    className="auth-button"
                   onClick={() => {
-                    navigate(true);
+                   setOpenAuth(true)
                     console.log("hello my name iskslk");
                   }}
                 >

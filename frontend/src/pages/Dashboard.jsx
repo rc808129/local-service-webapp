@@ -30,7 +30,7 @@ const Dashboard = () => {
   const [openAuth, setOpenAuth] = useState(false);
     const [authType, setAuthType] = useState("signup");
 
-  const [searchSkill, setSearchSkill] = useState("");
+
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,43 +49,13 @@ const Dashboard = () => {
     setAuthType("signup")
   };
 
-  const handleSearch = () => {
-    if (searchSkill.trim() === "") {
-      alert("Please enter a skill to search");
-      return;
-    }
+ 
 
-    navigate(`/search/${encodeURIComponent(searchSkill)}`);
-  };
-
-  const handleClick = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const res = await axios.get(`${API_URL}/api/profiles/my`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (res.data.profile) {
-        navigate("/my-profile");
-      } else {
-        navigate("/workers");
-      }
-    } catch (error) {
-      console.log(error);
-      navigate("/workers");
-    }
-  };
 
   return (
     <>
      
-<Navbar
-  searchSkill={searchSkill}
-  setSearchSkill={setSearchSkill}
-  handleSearch={handleSearch}
-  navigate={setOpenAuth}
-  handleClick={handleClick}
+<Navbar  setOpenAuth={setOpenAuth}
 />
       <Modal
         open={openAuth}

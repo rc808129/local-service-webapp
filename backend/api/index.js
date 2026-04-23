@@ -10,7 +10,16 @@ console.log("Mongo URI:", process.env.MONGO_URI);
 
 
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    "http://localhost:5173",           // Vite default
+    "http://localhost:3000",
+    "https://local-service-webapp.vercel.app"   // production mein daal dena
+  ],
+  credentials: true,          // agar cookies/token bhejna hai toh
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)

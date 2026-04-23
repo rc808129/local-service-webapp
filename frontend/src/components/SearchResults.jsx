@@ -9,7 +9,7 @@ import {
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-
+import Navbar from "./Navbar"
 import TransgenderIcon from '@mui/icons-material/Transgender';
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -89,7 +89,10 @@ if (loading) {
   }
 
  return (
-    <Box sx={{ py: 8, bgcolor: '#f8fafc', minHeight: '100vh' }}>
+       
+
+    <Box sx={{  bgcolor: '#f8fafc', minHeight: '100vh' }}>
+      <Navbar/>
       <Container maxWidth="lg">
         <Typography
           variant="h3"
