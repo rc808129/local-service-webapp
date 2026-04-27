@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 
+
+
 const app = express();
 
 console.log("Mongo URI:", process.env.MONGO_URI);
@@ -21,7 +23,7 @@ app.use(cors({
     "https://local-service-webapp.vercel.app",
     "https://local-service-webapp-646g.vercel.app",  // production mein daal dena
   ],
-  
+
   credentials: true,          // agar cookies/token bhejna hai toh
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
