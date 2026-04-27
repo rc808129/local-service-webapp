@@ -98,7 +98,7 @@ const Dashboard = () => {
       <NearbyWorkers />
       <HowItWorks />
       <Testimonials />
-      <CallToAction />
+      {/* <CallToAction /> */}
       <Footer />
     </>
   );

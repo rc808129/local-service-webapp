@@ -1,8 +1,10 @@
-import express from "express";
 import dotenv from 'dotenv';
+dotenv.config();
+import express from "express";
+
 import mongoose from 'mongoose';
 import cors from 'cors';
-dotenv.config();
+
 
 const app = express();
 
@@ -10,18 +12,22 @@ console.log("Mongo URI:", process.env.MONGO_URI);
 
 
 
+
 app.use(cors({
   origin: [
     "http://localhost:5173",           // Vite default
-    "http://localhost:3000",
+    "http://localhost:5000",
+    "https://local-service-webapp.vercel.app",
     "https://local-service-webapp.vercel.app",
     "https://local-service-webapp-646g.vercel.app",  // production mein daal dena
   ],
+  
   credentials: true,          // agar cookies/token bhejna hai toh
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
@@ -30,8 +36,8 @@ mongoose.connect(process.env.MONGO_URI)
 
 import userRoutes from '../routes/users.js'
 app.use('/api/users', userRoutes);
+// import profileRoutes from '../routes/profiles.js'
 import profileRoutes from '../routes/profiles.js'
-
 app.use('/api/profiles', profileRoutes);
 
 import requestRoutes from '../routes/requests.js'

@@ -2,26 +2,33 @@
 import express from "express";
 import Profile from "../models/Profile.js";
 import auth from "../middleware/auth.js";
+import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
 
 
 
+
+
 router.post("/", auth, async (req, res) => {
   try {
-   const {
-    name,
-    age,
-    bio,
-    gender,
-    location,
-    phone,
-    price,
-    pricingType
-  } = req.body.data;
 
-  const { skills = [], availability = [], photo } = req.body;
+    const bodyData = req.body;
+    console.log(bodyData)
+   const {
+      name,
+      age,
+      bio = "",
+      gender,
+      location,
+      phone = "",
+      price = 0,
+      pricingType = "service",
+      skills = [],
+      availability = [],
+      photo                     // ← Image URL yahan aayega
+    } = bodyData;               // ← Yeh line important hai
 
   console.log(name);
   console.log(skills);
@@ -87,8 +94,9 @@ router.get('/my', auth, async (req, res) => {
 
 // PUT /api/profiles – Update my profile
 
-router.patch('/', auth, async (req, res) => {
+router.patch('/', auth, upload.single("image"),  async (req, res) => {
 try {
+   const data = JSON.parse(req.body.data);
    const {
     name,
     age,
@@ -98,35 +106,37 @@ try {
     phone,
     price,
     pricingType
-  } = req.body;
+  } = data;
 
-  const { skills = [], availability = [], photo } = req.body;
+ const { skills = [], availability = [] } = data;
 
-  console.log(name);
-  console.log(skills);
-  console.log(availability);
-  console.log(photo)
+  // console.log(name);
+  // console.log(skills);
+  // console.log(availability);
+  // console.log(photo)
 
   
     let profile = await Profile.findOne({ userId: req.user.id });
 
-   
-    if (profile) {
-      Object.assign(profile, {
-        name: name ?? profile.name,
-        phone: phone ?? profile.phone,
-        bio: bio ?? profile.bio,
-        gender: gender ?? profile.gender,
-        age: age ?? profile.age,
-        location: location ?? profile.location,
-        skills: skills.length ? skills : profile.skills,
-        price: price ?? profile.pricePerHour,
-        pricingType: pricingType ?? profile.pricingType,
-       photo: photo ?? profile.photo,
-        availability: availability.length ? availability : profile.availability,
-      });
+       if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
 
-      
+      const imageUrl = req.file?.path;
+   
+    Object.assign(profile, {
+      name: name ?? profile.name,
+      phone: phone ?? profile.phone,
+      bio: bio ?? profile.bio,
+      gender: gender ?? profile.gender,
+      age: age ?? profile.age,
+      location: location ?? profile.location,
+      skills: skills.length ? skills : profile.skills,
+      price: price ?? profile.price,
+      pricingType: pricingType ?? profile.pricingType,
+      photo: imageUrl ?? profile.photo, //  Cloudinary URL
+      availability: availability.length ? availability : profile.availability,
+    });
 
       await profile.save();
 
@@ -135,13 +145,14 @@ try {
         message: "Profile updated successfully",
         profile,
       });
-
-    }
+    
   } catch (err) {
     console.error('PROFILE UPDATE ERROR:', err);
     res.status(500).json({ msg: 'Server error' });
   }
 });
+
+
 router.get("/search", auth, async (req, res) => {
   try {
     const { skill } = req.query;

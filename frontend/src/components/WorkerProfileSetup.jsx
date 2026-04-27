@@ -50,18 +50,13 @@ const WorkerProfileSetup = () => {
   const navigate = useNavigate();
   const { register, handleSubmit,control } = useForm();
   const [skills, setSkills] = useState([]);
-  const [photo, setPhoto] = useState(null);
+ const [photo, setPhoto] = useState("");
   const [availability, setAvailability] = useState([]);
+  const [file, setFile] = useState(null);
 
   const onSubmit = async (data) => {
     try {
-      const profileData = {
-        data,
-        skills,
-        availability,
-        photo: photo ? photo : null,
-      };
-      console.log(profileData);
+      
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -70,9 +65,12 @@ const WorkerProfileSetup = () => {
         return;
       }
 
+     
+    //  
+
       const res = await axios.post(
         `${API_URL}/api/profiles`,
-        profileData,
+        data,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -151,8 +149,11 @@ const WorkerProfileSetup = () => {
                 type="file"
                 hidden
                 accept="image/*"
-                onChange={(e) =>
-                  setPhoto(URL.createObjectURL(e.target.files[0]))
+                onChange={(e) =>{
+                  const selectedFile = e.target.files[0];
+                   setFile(selectedFile);
+                  setPhoto(URL.createObjectURL(selectedFile))
+                }
                 }  // aisa temporary url banana taaki vah web page mai displya ho sakte
               />
             </Button>
@@ -168,8 +169,11 @@ const WorkerProfileSetup = () => {
                 type="file"
                 hidden
                 accept="image/*"
-                onChange={(e) =>
-                  setPhoto(URL.createObjectURL(e.target.files[0]))
+                onChange={(e) =>{
+                  const selectedFile = e.target.files[0];
+                   setFile(selectedFile);
+                  setPhoto(URL.createObjectURL(selectedFile))
+                }
                 }
               />
             </Button>
