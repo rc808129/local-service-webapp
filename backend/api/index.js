@@ -19,9 +19,7 @@ app.use(cors({
   origin: [
     "http://localhost:5173",           // Vite default
     "http://localhost:5000",
-    "https://local-service-webapp.vercel.app",
-    "https://local-service-webapp.vercel.app",
-    "https://local-service-webapp-646g.vercel.app",  // production mein daal dena
+    "https://local-service-webapp-2odc.vercel.app/",  // production mein daal dena
   ],
 
   credentials: true,          // agar cookies/token bhejna hai toh
