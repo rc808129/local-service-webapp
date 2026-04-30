@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(openAuth)
+ 
 
   useEffect(() => {
     if (location.pathname === "/login" || location.pathname === "/signup") {

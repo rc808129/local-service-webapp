@@ -33,7 +33,7 @@ const Footer = () => {
       <Container maxWidth="lg">
         <Grid container spacing={6}>
           {/* Column 1: Customer Care */}
-          <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Customer Care
             </Typography>
@@ -47,7 +47,7 @@ const Footer = () => {
           </Grid>
 
           {/* Column 2: Services */}
-          <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Services
             </Typography>
@@ -62,7 +62,7 @@ const Footer = () => {
           </Grid>
 
           {/* Column 3: Corporate / About */}
-          <Grid item xs={12} sm={6} md={3}>
+           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               About Us
             </Typography>
@@ -76,7 +76,7 @@ const Footer = () => {
           </Grid>
 
           {/* Column 4: Keep In Touch (Newsletter + Social + App Download) */}
-          <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Keep In Touch
             </Typography>

@@ -117,7 +117,8 @@ setOpenAuth
               <Button 
                 variant="outlined" 
                 className="auth-button"
-                onClick={() => {
+                onClick={(e) => {
+                  e.currentTarget.blur(); 
                   setOpenAuth(true)
                   console.log("hello my name iskslk");
                 }}
