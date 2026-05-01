@@ -56,6 +56,14 @@ const WorkerProfileSetup = () => {
 
   const onSubmit = async (data) => {
     try {
+       const formData = new FormData();
+
+        formData.append("data", JSON.stringify(data));
+          formData.append("skills", JSON.stringify(skills));
+           formData.append("availability", JSON.stringify(availability));
+         formData.append("image", file);
+    
+      console.log(formData)
       
       const token = localStorage.getItem("token");
 
@@ -70,7 +78,7 @@ const WorkerProfileSetup = () => {
 
       const res = await axios.post(
         `${API_URL}/api/profiles`,
-        data,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -105,7 +113,7 @@ const WorkerProfileSetup = () => {
         sx={{
           width: { xs: "100%", md: 900 },
           borderRadius: 4,
-          p: { xs: 3, md: 5 },
+          p: { xs: 3, md: 5 }, // 1 = 8px
           my: 6,
         }}
       >
@@ -154,7 +162,7 @@ const WorkerProfileSetup = () => {
                    setFile(selectedFile);
                   setPhoto(URL.createObjectURL(selectedFile))
                 }
-                }  // aisa temporary url banana taaki vah web page mai displya ho sakte
+                } 
               />
             </Button>
 

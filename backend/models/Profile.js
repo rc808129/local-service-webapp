@@ -64,9 +64,9 @@ const profileSchema = new mongoose.Schema(
       default: []
     },
 
-    photo: {
-      type: String,
-      default: null
+    image: {
+    type: String,
+   default: null
     }
   },
   {

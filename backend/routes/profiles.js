@@ -1,41 +1,39 @@
-// routes/profiles.js
+
 import express from "express";
 import Profile from "../models/Profile.js";
 import auth from "../middleware/auth.js";
-import upload from "../middleware/upload.js";
+import{ upload } from "../middleware/upload.js";
+import cloudinary from "../config/cloudinary.js"
 
 const router = express.Router();
 
-
-
-
-
-
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, upload.single("image"), async (req, res) => {
   try {
+   console.log(req.user.id, "raj chaurosjfal;sdjafl")
+     const file = req.file;
+      const data = JSON.parse(req.body.data);
+      const skills = JSON.parse(req.body.skills);
+       const availability = JSON.parse(req.body.availability);
 
-    const bodyData = req.body;
-    console.log(bodyData)
-   const {
-      name,
-      age,
-      bio = "",
-      gender,
-      location,
-      phone = "",
-      price = 0,
-      pricingType = "service",
-      skills = [],
-      availability = [],
-      photo                     // ← Image URL yahan aayega
-    } = bodyData;               // ← Yeh line important hai
+         let imageUrl = "";
+        if (file) {
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { resource_type: "image" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
 
-  console.log(name);
-  console.log(skills);
-  console.log(availability);
-  console.log(photo)
+        stream.end(file.buffer);
+      });
 
-    let profile = await Profile.findOne({ userId: req.user.id });
+      imageUrl = result.secure_url;
+    }
+
+
+       let profile = await Profile.findOne({ userId: req.user.id });
 
 if (profile) {
    return res.status(400).json({
@@ -43,25 +41,18 @@ if (profile) {
    });
 }
 
-
-    
-    profile = await Profile.create({
-      userId: req.user.id,
-      name,
-      phone,
-      bio,
-      gender,
-      age,
-      location,
+  profile = await Profile.create({
+    userId: req.user.id,
+     ...data,
       skills,
-      price,
-      pricingType,
-      photo,
       availability,
-     
-    });
+      image: imageUrl,
+ })
 
-    res.status(201).json({
+
+      
+
+   res.status(201).json({
       success: true,
       message: "Profile created successfully",
       profile,
@@ -74,7 +65,65 @@ if (profile) {
       message: "Server error while saving profile",
     });
   }
-});
+
+})
+
+
+  //  console.log("post api call")
+  //   const bodyData = req.body;
+  //   console.log(bodyData)
+  //  const {
+  //     name,
+  //     age,
+  //     bio = "",
+  //     gender,
+  //     location,
+  //     phone = "",
+  //     price = 0,
+  //     pricingType = "service",
+  //     skills = [],
+  //     availability = [],
+  //     photo                     // ← Image URL yahan aayega
+  //   } = bodyData;               // ← Yeh line important hai
+
+//   console.log(name);
+//   console.log(skills);
+//   console.log(availability);
+//   console.log(photo)
+
+//     let profile = await Profile.findOne({ userId: req.user.id });
+
+// if (profile) {
+//    return res.status(400).json({
+//       message: "Profile already exists"
+//    });
+// }
+
+
+    
+//     profile = await Profile.create({
+//       userId: req.user.id,
+//       name,
+//       phone,
+//       bio,
+//       gender,
+//       age,
+//       location,
+//       skills,
+//       price,
+//       pricingType,
+//       photo,
+//       availability,
+     
+//     });
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Profile created successfully",
+//       profile,
+//     });
+
+  
 
 
 
