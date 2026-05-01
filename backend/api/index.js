@@ -17,13 +17,13 @@ console.log("Mongo URI:", process.env.MONGO_URI);
 
 app.use(cors({
   origin: [
-    "http://localhost:5173",           // Vite default
+    "http://localhost:5173",          
     "http://localhost:5000",
     "https://local-service-webapp-2odc.vercel.app/",
-    "https://local-service-webapp.vercel.app/", // production mein daal dena
+    "https://local-service-webapp.vercel.app/",
   ],
 
-  credentials: true,          // agar cookies/token bhejna hai toh
+  credentials: true,         
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -36,8 +36,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 import userRoutes from '../routes/users.js'
+
+
 app.use('/api/users', userRoutes);
-// import profileRoutes from '../routes/profiles.js'
 import profileRoutes from '../routes/profiles.js'
 app.use('/api/profiles', profileRoutes);
 

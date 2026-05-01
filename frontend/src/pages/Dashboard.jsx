@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-const API_URL = import.meta.env.VITE_API_URL;
 
 import ImageSlider from "../components/ImageSlider";
-
 import PopularServices from "../components/PopularServices";
 import HowItWorks from "../components/HowItWorks";
 import Testimonials from "../components/Testimonials";
 import Navbar from "../components/Navbar";
-import Login from "../components/Login"
-import Footer from "../components/Footer"
-import NearbyWorkers from "../components/NearbyWorkers"
-import CallToAction from "../components/CallToAction"
-
+import Login from "../components/Login";
+import Footer from "../components/Footer";
+import NearbyWorkers from "../components/NearbyWorkers";
 
 import {
   Box,
@@ -21,36 +16,17 @@ import {
   Backdrop,
 } from "@mui/material";
 
-import { useLocation, useNavigate } from "react-router-dom";
+
 import Signup from "../components/Signup"
-
-
 
 const Dashboard = () => {
   const [openAuth, setOpenAuth] = useState(false);
     const [authType, setAuthType] = useState("signup");
 
-
-
-  const navigate = useNavigate();
-  const location = useLocation();
- 
-
-  useEffect(() => {
-    if (location.pathname === "/login" || location.pathname === "/signup") {
-      setOpenAuth(true);
-    } else {
-      setOpenAuth(false);
-    }
-  }, [location.pathname]);
-
   const handleClose = () => {
     setOpenAuth(false)
     setAuthType("signup")
   };
-
- 
-
 
   return (
     <>
